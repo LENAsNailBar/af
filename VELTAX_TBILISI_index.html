@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VELTAX TBILISI</title>
+<style>
+:root{--blue:#0018F9;--pink:#FF007F;--bg:#f5f7ff;--black:#080808}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--blue);color:white}
+button,input,textarea,select{font:inherit}button{cursor:pointer;border:0}
+header{height:82px;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;border-bottom:1px solid #ffffff33;position:sticky;top:0;background:var(--blue);z-index:5}
+.logo{text-align:center;line-height:.8;font-weight:900;letter-spacing:-3px}.logo .v{font-size:48px}.logo .name{font-size:13px;letter-spacing:4px}.logo .city{font-size:8px;letter-spacing:3px;margin-top:5px}
+nav{display:flex;gap:18px;align-items:center}nav button{background:none;color:#fff;font-weight:700}
+.hero{min-height:58vh;display:grid;place-items:center;text-align:center;padding:80px 20px}
+.hero h1{font-size:clamp(55px,12vw,150px);margin:0;letter-spacing:-8px}.hero p{font-size:18px;max-width:650px;margin:20px auto;opacity:.85}
+.btn{padding:13px 20px;border-radius:4px;font-weight:800;background:#fff;color:var(--blue)}.darkbtn{background:#080808;color:#fff}
+section{background:#fff;color:#080808;padding:70px 6vw;min-height:40vh}section h2{font-size:42px;margin-top:0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}.card{border:1px solid #ddd;padding:18px;border-radius:8px}.card img{width:100%;height:180px;object-fit:cover;background:#eee}.price{font-weight:900;font-size:20px}
+.overlay{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;padding:20px;z-index:20}.modal{background:#fff;color:#111;max-width:520px;width:100%;padding:28px;border-radius:10px;max-height:90vh;overflow:auto}.modal input,.modal textarea,.modal select{width:100%;padding:12px;margin:7px 0 12px;border:1px solid #ccc;border-radius:5px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.msg{padding:10px;border-radius:5px;margin:8px 0}.ok{background:#b9f5c1}.wait{background:#ffb347}.no{background:#ff6262;color:#fff}
+#studio{display:none;background:var(--pink);min-height:100vh;color:white}.studio-nav{background:var(--pink);border-bottom:1px solid #ffffff55}.studio-section{background:#fff;color:#111}.pinkbtn{background:var(--pink);color:#fff}
+.admin{background:#111;color:#fff}.admin .modal{background:#171717;color:#fff}.admin input,.admin textarea,.admin select{background:#222;color:#fff;border-color:#555}
+.small{font-size:12px;opacity:.7}.hide{display:none!important}
+@media(max-width:700px){nav{gap:8px}nav button{font-size:12px}.row{grid-template-columns:1fr}.hero h1{letter-spacing:-4px}}
+
+.lang-switch{display:flex;gap:6px;align-items:center;margin-left:8px}
+.lang-switch button{border:1px solid currentColor;background:transparent;color:inherit;padding:6px 9px;border-radius:4px;cursor:pointer;font-weight:800}
+.lang-switch button.active{background:#fff;color:#0018F9}
+@media(max-width:700px){.lang-switch button{padding:5px 7px;font-size:11px}}
+
+</style>
+</head>
+<body>
+
+<div id="main">
+<header>
+  <div class="logo"><div class="v">[V]</div><div class="name">VELTAX</div><div class="city">TBILISI</div></div>
+  <nav>
+    <button onclick="scrollToId('events')" data-i18n="events">ივენთი</button>
+    <button onclick="scrollToId('shop')" data-i18n="shop">შოპი</button>
+    <button onclick="scrollToId('news')" data-i18n="news">ნიუსი</button>
+    <button onclick="openStudio()" data-i18n="studio">laus.studia</button>
+    <button onclick="openAuth()" data-i18n="login">შესვლა</button>
+    <div class="lang-switch"><button id="langGE" onclick="setLang('ka')">GE</button><button id="langEN" onclick="setLang('en')">EN</button></div>
+  </nav>
+</header>
+<div class="hero">
+  <div><h1>VELTAX</h1><p data-i18n="tagline">TBILISI / EVENTS / MUSIC / CULTURE</p>
+  <button class="btn" onclick="openAuth()" data-i18n="register">რეგისტრაცია</button></div>
+</div>
+<section id="events"><h2 data-i18n="events">ივენთი</h2><div id="eventsGrid" class="grid"></div></section>
+<section id="shop"><h2 data-i18n="shop">შოპი</h2><div id="shopGrid" class="grid"></div></section>
+<section id="news"><h2 data-i18n="news">ნიუსი</h2><div id="newsGrid" class="grid"></div></section>
+</div>
+
+<div id="studio">
+<header class="studio-nav">
+  <div class="logo"><div class="v">[V]</div><div class="name">VELTAX</div><div class="city">TBILISI</div></div>
+  <nav><button onclick="showMain()" data-i18n="main">მთავარი</button><button onclick="openAuth()" data-i18n="login">შესვლა</button><div class="lang-switch"><button id="langGE2" onclick="setLang('ka')">GE</button><button id="langEN2" onclick="setLang('en')">EN</button></div></nav>
+</header>
+<div class="hero"><div><h1>laus.studia</h1><p>STUDIO / BOOKINGS / CREATIVE SPACE</p></div></div>
+<section class="studio-section"><h2 data-i18n="studioTitle">სტუდია</h2><div id="studioInfo"></div><h3 data-i18n="availableSlots">თავისუფალი სლოტები</h3><div id="slotsGrid" class="grid"></div></section>
+</div>
+
+<div id="overlay" class="overlay"><div class="modal" id="modal"></div></div>
+
+<script>
+const I18N = {
+  ka: {
+    login:"შესვლა", register:"რეგისტრაცია", events:"ივენთი", shop:"შოპი", news:"ნიუსი", studio:"laus.studia",
+    tagline:"TBILISI / EVENTS / MUSIC / CULTURE", main:"მთავარი", admin:"ადმინისტრაცია",
+    cancel:"გაუქმება", close:"დახურვა", approve:"დადასტურება", reject:"უარყოფა", add:"დამატება",
+    pending:"მოლოდინში", approved:"დადასტურებული", rejected:"უარყოფილი",
+    fname:"სახელი", lname:"გვარი", pid:"პირადი ნომერი", birth:"დაბადების თარიღი",
+    social:"სოციალური მედიის ლინკი", email:"მეილი", username:"იუზერნეიმი", password:"პაროლი",
+    title:"სათაური", photoUrl:"ფოტოს URL", description:"აღწერა", product:"პროდუქტი", price:"ფასი",
+    information:"ინფორმაცია", slotName:"სლოტის სახელი", availableSlots:"თავისუფალი სლოტები",
+    verifications:"ვერიფიკაციები", addEvent:"ივენთის დამატება", addProduct:"შოპის დამატება",
+    addNews:"ნიუსის დამატება", bookings:"ჯავშნები", personalData:"პირადი მონაცემები",
+    status:"სტატუსი", verificationsNone:"ვერიფიკაციები არ არის.", bookingsNone:"ჯავშნები არ არის.",
+    eventsNone:"ივენთები ჯერ არ არის დამატებული.", productsNone:"პროდუქცია ჯერ არ არის დამატებული.",
+    newsNone:"ნიუსი ჯერ არ არის დამატებული.", studio:"laus.studia",
+    studioTitle:"სტუდია", studioInfo:"ჯავშნის დროს მიუთითეთ ტელეფონი, მეილი, თარიღი და დრო.",
+    booking:"ჯავშანი", phone:"ტელეფონის ნომერი", sendBooking:"ჯავშნის გაგზავნა",
+    bookingAccepted:"ჯავშანი მიღებულია", adminContact:"ადმინისტრატორი დაგიკავშირდებათ დასადასტურებლად.",
+    bookingSuccess:"კარგი", hello:"გამარჯობა", verified:"თქვენ შეგიძლიათ ბილეთი შეიძინოთ ადგილზე.",
+    fullAccess:"სრული ფუნქციონალი ხელმისაწვდომი გახდება დადასტურების შემდეგ.",
+    registrationDone:"რეგისტრაცია დასრულებულია",
+    waitingVerification:"თქვენი ანგარიში ელოდება ადმინისტრატორის ვერიფიკაციას.",
+    adultOnly:"რეგისტრაცია შესაძლებელია მხოლოდ 18+ მომხმარებლისთვის.",
+    exists:"იუზერნეიმი ან მეილი უკვე არსებობს.", wrongData:"არასწორი მონაცემებია.",
+    wrongAdmin:"არასწორი ადმინისტრატორის მონაცემები.", verification:"ვერიფიკაცია",
+    venueTicket:"ბილეთის შეძენა შესაძლებელია მხოლოდ ადგილზე."
+  },
+  en: {
+    login:"Login", register:"Register", events:"Events", shop:"Shop", news:"News", studio:"laus.studia",
+    tagline:"TBILISI / EVENTS / MUSIC / CULTURE", main:"Main", admin:"Admin",
+    cancel:"Cancel", close:"Close", approve:"Approve", reject:"Reject", add:"Add",
+    pending:"Pending", approved:"Approved", rejected:"Rejected",
+    fname:"First name", lname:"Last name", pid:"Personal ID number", birth:"Full date of birth",
+    social:"Social media link", email:"Email", username:"Username", password:"Password",
+    title:"Title", photoUrl:"Photo URL", description:"Description", product:"Product", price:"Price",
+    information:"Information", slotName:"Slot name", availableSlots:"Available slots",
+    verifications:"Verifications", addEvent:"Add event", addProduct:"Add product",
+    addNews:"Add news", bookings:"Bookings", personalData:"Personal data",
+    status:"Status", verificationsNone:"No verification requests.", bookingsNone:"No bookings.",
+    eventsNone:"No events have been added yet.", productsNone:"No products have been added yet.",
+    newsNone:"No news has been added yet.",
+    studioTitle:"Studio", studioInfo:"For a booking, provide your phone, email, date and time.",
+    booking:"Booking", phone:"Phone number", sendBooking:"Send booking",
+    bookingAccepted:"Booking received", adminContact:"The administrator will contact you to confirm.",
+    bookingSuccess:"OK", hello:"Hello", verified:"You can purchase your ticket at the venue.",
+    fullAccess:"Full functionality will be available after verification.",
+    registrationDone:"Registration completed",
+    waitingVerification:"Your account is waiting for administrator verification.",
+    adultOnly:"Registration is available only to users aged 18+.",
+    exists:"Username or email already exists.", wrongData:"Incorrect credentials.",
+    wrongAdmin:"Incorrect administrator credentials.", verification:"Verification",
+    venueTicket:"Tickets can only be purchased at the venue."
+  }
+};
+let currentLang = localStorage.getItem('veltax_lang') || 'ka';
+function setLang(lang){
+  currentLang=lang;
+  localStorage.setItem('veltax_lang',lang);
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.getAttribute('data-i18n');
+    if(I18N[lang][key]) el.textContent=I18N[lang][key];
+  });
+  document.getElementById('langGE')?.classList.toggle('active',lang==='ka');
+  document.getElementById('langEN')?.classList.toggle('active',lang==='en');
+  document.getElementById('langGE2')?.classList.toggle('active',lang==='ka');
+  document.getElementById('langEN2')?.classList.toggle('active',lang==='en');
+}
+function t(key){return I18N[currentLang][key] || I18N.ka[key] || key;}
+</script>
+<script>
+const KEY='veltax_demo_db';
+let db=JSON.parse(localStorage.getItem(KEY)||'null')||{
+ users:[], events:[], products:[], news:[],
+ slots:[{date:'2026-09-20',time:'18:00',title:'Studio session'}],
+ bookings:[]
+};
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+function openModal(html){document.getElementById('modal').innerHTML=html;document.getElementById('overlay').style.display='flex'}
+function closeModal(){document.getElementById('overlay').style.display='none'}
+function openAuth(){
+openModal(`<h2>VELTAX</h2><div id="authbox">
+<button class="btn darkbtn" onclick="registerForm()">${t('register')}</button>
+<button class="btn" onclick="loginForm()">${t('login')}</button>
+<hr><button onclick="adminLogin()">${t('admin')}</button></div>`)
+}
+function registerForm(){
+openModal(`<h2>${t('register')}</h2>
+<form onsubmit="register(event)">
+<div class="row"><input id="fname" placeholder="${t('fname')}" required><input id="lname" placeholder="${t('lname')}" required></div>
+<input id="pid" placeholder="${t('pid')}" minlength="11" maxlength="11" required>
+<input id="birth" type="date" aria-label="${t('birth')}" required>
+<input id="social" placeholder="${t('social')}" type="url" required>
+<input id="email" placeholder="${t('email')}" type="email" required>
+<div class="row"><input id="user" placeholder="${t('username')}" required><input id="pass" placeholder="${t('password')}" type="password" minlength="6" required></div>
+<button class="btn darkbtn">${t('register')}</button> <button type="button" onclick="closeModal()">${t('cancel')}</button>
+</form>`)
+}
+function register(e){
+e.preventDefault();
+let birthDate=new Date(birth.value+'T00:00:00');
+let age=new Date().getFullYear()-birthDate.getFullYear();
+if(new Date() < new Date(birthDate.setFullYear(birthDate.getFullYear()+age))) age--;
+let y=birth.value;
+if(age<18){alert(t('adultOnly'));return}
+if(db.users.some(u=>u.user===user.value||u.email===email.value)){alert(t('exists'));return}
+db.users.push({fname:fname.value,lname:lname.value,pid:pid.value,birth:y,social:social.value,email:email.value,user:user.value,pass:pass.value,status:'pending'});
+save();
+openModal(`<h2>${t('registrationDone')}</h2><p class="msg wait">${t('waitingVerification')}</p><button class="btn" onclick="closeModal()">${t('close')}</button>`)
+}
+function loginForm(){
+openModal(`<h2>${t('login')}</h2><form onsubmit="login(event)"><input id="lu" placeholder="${t('username')}" required><input id="lp" type="password" placeholder="${t('password')}" required><button class="btn darkbtn">${t('login')}</button></form>`)
+}
+function login(e){
+e.preventDefault();
+let u=db.users.find(x=>x.user===lu.value&&x.pass===lp.value);
+if(!u){alert(t('wrongData'));return}
+let cls=u.status==='approved'?'ok':u.status==='pending'?'wait':'no';
+let statusText=u.status==='approved'?t('approved'):u.status==='pending'?t('pending'):t('rejected');
+openModal(`<h2>${t('hello')}, ${u.fname}</h2><div class="msg ${cls}">${t('verification')}: ${statusText}</div>${u.status==='approved'?`<p>${t('verified')}</p>`:`<p>${t('fullAccess')}</p>`}<button class="btn" onclick="closeModal()">${t('close')}</button>`)
+}
+function adminLogin(){
+openModal(`<h2>${t('admin')}</h2><form onsubmit="admin(event)"><input id="au" placeholder="user" required><input id="ap" type="password" placeholder="password" required><button class="btn darkbtn">${t('login')}</button></form>`)
+}
+function admin(e){e.preventDefault();if(au.value==='veltaxtbl111'&&ap.value==='VELTAXITtbilisi11')adminPanel();else alert(t('wrongAdmin'))}
+function adminPanel(){
+openModal(`<div class="admin"><h2>ADMIN PANEL</h2><h3>${t('verifications')}</h3><div id="usersAdmin"></div>
+<hr><h3>${t('addEvent')}</h3><form onsubmit="addEvent(event)"><input id="et" placeholder="${t('title')}" required><input id="ei" placeholder="${t('photoUrl')}" type="url"><textarea id="ed" placeholder="${t('description')}"></textarea><button class="btn">${t('add')}</button></form>
+<hr><h3>${t('addProduct')}</h3><form onsubmit="addProduct(event)"><input id="pt" placeholder="${t('product')}" required><input id="pp" type="number" placeholder="${t('price')}" required><input id="pi" placeholder="${t('photoUrl')}" type="url"><textarea id="pd" placeholder="${t('description')}"></textarea><button class="btn">${t('add')}</button></form>
+<hr><h3>${t('addNews')}</h3><form onsubmit="addNews(event)"><input id="ni" placeholder="${t('photoUrl')}" type="url"><textarea id="nd" placeholder="${t('information')}"></textarea><button class="btn">${t('add')}</button></form>
+<hr><h3>laus.studia — ${t('availableSlots')}</h3><form onsubmit="addSlot(event)"><input id="sd" type="date" required><input id="st" type="time" required><input id="stitle" placeholder="${t('slotName')}"><button class="btn">${t('add')}</button></form>
+<hr><h3>${t('bookings')}</h3><div id="bookingsAdmin"></div><button onclick="closeModal()">${t('close')}</button></div>`)
+renderAdmin()
+}
+function renderAdmin(){
+usersAdmin.innerHTML=db.users.map((u,i)=>`<div class="msg ${u.status==='approved'?'ok':u.status==='pending'?'wait':'no'}">
+<b>${u.fname} ${u.lname}</b> — @${u.user}<br>
+<strong>${t('personalData')}:</strong><br>
+${t('fname')}: ${u.fname}<br>
+${t('lname')}: ${u.lname}<br>
+${t('pid')}: ${u.pid}<br>
+${t('birth')}: ${u.birth}<br>
+${t('social')}: <a href="${u.social}" target="_blank" rel="noopener">${u.social}</a><br>
+${t('email')}: ${u.email}<br>
+${t('status')}: ${u.status==='approved'?t('approved'):u.status==='pending'?t('pending'):t('rejected')}<br><br>
+${u.status==='pending'?`<button onclick="setStatus(${i},'approved')">${t('approve')}</button> <button onclick="setStatus(${i},'rejected')">${t('reject')}</button>`:''}</div>`).join('')||`<p>${t('verificationsNone')}</p>`;
+bookingsAdmin.innerHTML=db.bookings.map(b=>`<div class="card">${b.date} ${b.time}<br>${b.email}<br>${b.phone}</div>`).join('')||`<p>${t('bookingsNone')}</p>`
+}
+function setStatus(i,s){db.users[i].status=s;save();adminPanel()}
+function addEvent(e){e.preventDefault();db.events.push({title:et.value,img:ei.value,desc:ed.value});save();adminPanel();render()}
+function addProduct(e){e.preventDefault();db.products.push({title:pt.value,price:pp.value,img:pi.value,desc:pd.value});save();adminPanel();render()}
+function addNews(e){e.preventDefault();db.news.push({img:ni.value,desc:nd.value});save();adminPanel();render()}
+function addSlot(e){e.preventDefault();db.slots.push({date:sd.value,time:st.value,title:stitle.value});save();adminPanel();render()}
+function render(){
+eventsGrid.innerHTML=db.events.map(x=>`<div class="card">${x.img?`<img src="${x.img}">`:''}<h3>${x.title}</h3><p>${x.desc||''}</p></div>`).join('')||`<p>${t('eventsNone')}</p>`;
+shopGrid.innerHTML=db.products.map(x=>`<div class="card">${x.img?`<img src="${x.img}">`:''}<h3>${x.title}</h3><p>${x.desc||''}</p><div class="price">${x.price} ₾</div></div>`).join('')||`<p>${t('productsNone')}</p>`;
+newsGrid.innerHTML=db.news.map(x=>`<div class="card">${x.img?`<img src="${x.img}">`:''}<p>${x.desc||''}</p></div>`).join('')||`<p>${t('newsNone')}</p>`;
+slotsGrid.innerHTML=db.slots.map((x,i)=>`<div class="card"><h3>${x.title||'Studio slot'}</h3><p>${x.date} — ${x.time}</p><button class="btn pinkbtn" onclick="book(${i})">${t('booking')}</button></div>`).join('');
+studioInfo.innerHTML=`<p>${t('studioInfo')}</p>`;
+document.querySelectorAll('[data-i18n]').forEach(el=>{const key=el.getAttribute('data-i18n');if(I18N[currentLang][key])el.textContent=I18N[currentLang][key]});
+}
+function openStudio(){main.style.display='none';studio.style.display='block';render()}
+function showMain(){studio.style.display='none';main.style.display='block';render()}
+function book(i){
+let s=db.slots[i];openModal(`<h2>${t('booking')}</h2><p><b>${s.date} — ${s.time}</b></p><form onsubmit="submitBooking(event,${i})"><input id="bp" placeholder="${t('phone')}" required><input id="be" type="email" placeholder="${t('email')}" required><button class="btn pinkbtn">${t('sendBooking')}</button></form>`)
+}
+function submitBooking(e,i){e.preventDefault();let s=db.slots[i];db.bookings.push({date:s.date,time:s.time,phone:bp.value,email:be.value});db.slots.splice(i,1);save();openModal(`<h2>${t('bookingAccepted')}</h2><p>${t('adminContact')}</p><button class="btn pinkbtn" onclick="closeModal()">${t('bookingSuccess')}</button>`);render()}
+render();
+setLang(currentLang);
+</script>
+</body>
+</html>
